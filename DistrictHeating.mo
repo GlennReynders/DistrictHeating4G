@@ -8,7 +8,7 @@ package DistrictHeating
         annotation (Placement(transformation(extent={{-98,70},{-78,90}})));
       inner Modelica.Fluid.System system
         annotation (Placement(transformation(extent={{-60,70},{-40,90}})));
-      IDEAS.Interfaces.Building building(
+      DistrictHeating.Interfaces.Building building(
         redeclare IDEAS.HeatingSystems.Examples.DummyBuilding building(nZones=1,
             nEmb=0),
         redeclare IDEAS.VentilationSystems.None ventilationSystem,
@@ -702,7 +702,7 @@ package DistrictHeating
       replaceable IDEAS.Interfaces.BaseClasses.Structure building
         "Building structure" annotation (Placement(transformation(extent={{-66,-10},
                 {-36,10}})), choicesAllMatching=true);
-      replaceable IDEAS.Interfaces.BaseClasses.HeatingSystem heatingSystem(
+      replaceable DistrictHeating.Interfaces.HeatingSystem heatingSystem(
         nZones=building.nZones) "Thermal building heating system" annotation (Placement(
             transformation(extent={{-20,-10},{20,10}})), choicesAllMatching=true);
       replaceable IDEAS.Interfaces.BaseClasses.Occupant occupant(nZones=building.nZones)
@@ -900,5 +900,6 @@ package DistrictHeating
                 -100},{100,100}}), graphics));
     end Building;
   end Interfaces;
-  annotation (uses(IDEAS(version="0.1"), Modelica(version="3.2.1")));
+  annotation (uses(IDEAS(version="0.1"), Modelica(version="3.2.1")),
+              uses(IDEAS(version="0.1"), Modelica(version="3.2.1")));
 end DistrictHeating;
