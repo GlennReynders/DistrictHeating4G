@@ -14,8 +14,12 @@ package DistrictHeating
         redeclare IDEAS.VentilationSystems.None ventilationSystem,
         redeclare IDEAS.Occupants.Standards.ISO13790 occupant,
         DH=true,
-        redeclare DistrictHeating.HeatingSystem.heatexchangerDH heatingSystem(
-            DH=true))
+        redeclare HeatingSystem.Radiator                        heatingSystem(
+            DH=true, hex(
+            m1_flow_nominal=2,
+            m2_flow_nominal=2,
+            dp1_nominal=200,
+            dp2_nominal=200)))
         annotation (Placement(transformation(extent={{-44,-10},{-24,10}})));
 
       IDEAS.Fluid.FixedResistances.Pipe_HeatPort pipe_HeatPort(
@@ -167,7 +171,12 @@ package DistrictHeating
     end heatexchangerDH;
 
     model Radiator
-      extends Interfaces.PartialDistrictHeating;
+      extends Interfaces.PartialDistrictHeating(hex(
+          m1_flow_nominal=1,
+          m2_flow_nominal=1,
+          m1_flow(start=1),
+          dp1_nominal=1,
+          dp2_nominal=1));
 
     equation
       QHeaSys = -sum(emission.heatPortCon.Q_flow) - sum(emission.heatPortRad.Q_flow);
@@ -190,14 +199,16 @@ package DistrictHeating
           nEmbPorts=0,
           nLoads=1,
           nZones=1,
-          port_b(redeclare package Medium = Medium),
-          port_a(redeclare package Medium = Medium));
+          port_b(redeclare package Medium =
+                Modelica.Media.Examples.TwoPhaseWater),
+          port_a(redeclare package Medium =
+                Modelica.Media.Examples.TwoPhaseWater));
         // --- Paramter: General parameters for the design (nominal) conditions and heat curve
         parameter Modelica.SIunits.Power[nZones] QNom(each min=0) = ones(nZones)*5000
           "Nominal power, can be seen as the max power of the emission system per zone";
         parameter Boolean minSup=true
           "true to limit the supply temperature on the lower side";
-          parameter SI.Temperature TSupMin=273.15 + 30
+          parameter Modelica.SIunits.Temperature TSupMin=273.15 + 30
           "Minimum supply temperature if enabled";
         parameter Modelica.SIunits.Temperature TSupNom=273.15 + 45
           "Nominal supply temperature";
@@ -251,7 +262,7 @@ package DistrictHeating
             QNom=QNom,
             each powerFactor=3.37,
           redeclare each package Medium = Medium) constrainedby
-          Fluid.HeatExchangers.Interfaces.EmissionTwoPort
+          IDEAS.Fluid.HeatExchangers.Interfaces.EmissionTwoPort
           annotation (Placement(transformation(extent={{120,24},{150,44}})));
         // --- boudaries
         Modelica.Thermal.HeatTransfer.Sources.FixedTemperature fixedTemperature(T=293.15)
@@ -263,7 +274,7 @@ package DistrictHeating
         IDEAS.Fluid.Sources.FixedBoundary absolutePressure(redeclare package
             Medium =
               Medium, use_T=false,
-          nPorts=1)
+          nPorts=3)
           annotation (Placement(transformation(extent={{-10,-10},{10,10}},
               rotation=90,
               origin={-106,-114})));
@@ -276,7 +287,7 @@ package DistrictHeating
           minSup=minSup,
           corFac_val=corFac_val,
           THeaterSet(start=293.15)) constrainedby
-          Controls.ControlHeating.Interfaces.Partial_Ctrl_Heating(
+          IDEAS.Controls.ControlHeating.Interfaces.Partial_Ctrl_Heating(
           heatingCurve(timeFilter=timeFilter),
           TSupNom=TSupNom,
           dTSupRetNom=dTSupRetNom)
@@ -343,9 +354,9 @@ package DistrictHeating
           V=sum(m_flow_nominal)*30/1000,
           nPorts=1+nZones)
           annotation (Placement(transformation(extent={{104,-92},{124,-72}})));
-        replaceable IDEAS.Fluid.HeatExchangers.ConstantEffectiveness hex(redeclare
-            package Medium1 =
-              Medium, redeclare package Medium2 = Medium)
+        replaceable IDEAS.Fluid.HeatExchangers.ConstantEffectiveness hex(
+            redeclare package Medium2 = Medium, redeclare package Medium1 =
+              Modelica.Media.Examples.TwoPhaseWater)
           annotation (Placement(transformation(extent={{-146,16},{-126,36}})));
       equation
           // connections that are function of the number of circuits
@@ -437,22 +448,10 @@ package DistrictHeating
             points={{-139.556,69},{-80,69},{-80,80},{45,80},{45,70}},
             color={0,0,127},
             smooth=Smooth.None));
-        connect(hex.port_b1, senTemHea_out.port_a) annotation (Line(
-            points={{-126,32},{-110,32},{-110,58},{-62,58}},
-            color={0,127,255},
-            smooth=Smooth.None));
-        connect(hex.port_a2, pipeReturn.port_b) annotation (Line(
-            points={{-126,20},{-110,20},{-110,-92},{-18,-92}},
-            color={0,127,255},
-            smooth=Smooth.None));
         connect(pipeReturn.heatPort, fixedTemperature.port) annotation (Line(
             points={{-8,-88},{-10,-88},{-10,-68},{-102,-68},{-102,-12},{-127,-12},{-127,
                 -14}},
             color={191,0,0},
-            smooth=Smooth.None));
-        connect(port_a, hex.port_b2) annotation (Line(
-            points={{-100,100},{-100,82},{-180,82},{-180,20},{-146,20}},
-            color={0,127,255},
             smooth=Smooth.None));
         connect(heatPortCon, emission.heatPortCon) annotation (Line(
             points={{-200,20},{-182,20},{-182,86},{142.5,86},{142.5,44}},
@@ -463,11 +462,23 @@ package DistrictHeating
             color={191,0,0},
             smooth=Smooth.None));
         connect(absolutePressure.ports[1], pipeReturn.port_b) annotation (Line(
-            points={{-106,-104},{-106,-92},{-18,-92}},
+            points={{-108.667,-104},{-108.667,-92},{-18,-92}},
             color={0,127,255},
             smooth=Smooth.None));
-        connect(hex.port_a1, port_b) annotation (Line(
-            points={{-146,32},{-178,32},{-178,94},{-120,94},{-120,100},{-120,100}},
+        connect(port_b, hex.port_a1) annotation (Line(
+            points={{-120,100},{-134,100},{-134,32},{-146,32}},
+            color={0,127,255},
+            smooth=Smooth.None));
+        connect(hex.port_b1, port_a) annotation (Line(
+            points={{-126,32},{-114,32},{-114,100},{-100,100}},
+            color={0,127,255},
+            smooth=Smooth.None));
+        connect(hex.port_b2, absolutePressure.ports[2]) annotation (Line(
+            points={{-146,20},{-126,20},{-126,-104},{-106,-104}},
+            color={0,127,255},
+            smooth=Smooth.None));
+        connect(hex.port_a2, senTemHea_out.port_a) annotation (Line(
+            points={{-126,20},{-94,20},{-94,58},{-62,58}},
             color={0,127,255},
             smooth=Smooth.None));
         annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-200,
@@ -817,7 +828,7 @@ package DistrictHeating
           color={0,0,0},
           smooth=Smooth.None));
       connect(occupant.TSet, heatingSystem.TSet) annotation (Line(
-          points={{0,-22},{0,-16},{0,-10.4},{0,-10.4}},
+          points={{0,-22},{0,-10.4}},
           color={0,0,127},
           smooth=Smooth.None));
 
