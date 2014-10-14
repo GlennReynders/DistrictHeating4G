@@ -1,4 +1,4 @@
-within DistrictHeating.HeatingSystem;
+within DistrictHeating4G.HeatingSystem;
 model Radiator
   extends Interfaces.PartialDistrictHeating(hex(
       m1_flow_nominal=1,

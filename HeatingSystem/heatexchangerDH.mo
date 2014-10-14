@@ -1,9 +1,9 @@
-within DistrictHeating.HeatingSystem;
+within DistrictHeating4G.HeatingSystem;
 model heatexchangerDH
   "district heating sub station buildings constant efficiency"
   import DistrictHeating;
   extends IDEAS.HeatingSystems.Interfaces.Partial_IdealHeating;
-  extends DistrictHeating.Interfaces.HeatingSystem(
+  extends DistrictHeating4G.Interfaces.Baseclasses.HeatingSystem(
     final isHea = true,
     final isCoo = false,
     final nConvPorts = nZones,

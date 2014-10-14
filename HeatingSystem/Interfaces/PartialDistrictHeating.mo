@@ -1,9 +1,9 @@
-within DistrictHeating.HeatingSystem.Interfaces;
+within DistrictHeating4G.HeatingSystem.Interfaces;
 partial model PartialDistrictHeating "Hydraulic multi-zone heating "
   import DistrictHeating;
   replaceable package Medium =
       Modelica.Media.Water.ConstantPropertyLiquidWater;
-  extends DistrictHeating.Interfaces.HeatingSystem(
+  extends DistrictHeating4G.Interfaces.Baseclasses.HeatingSystem(
     isHea = true,
     isCoo = false,
     nConvPorts = nZones,
