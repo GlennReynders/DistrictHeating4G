@@ -221,7 +221,7 @@ package DistrictHeating
           filteredMassFlowRate=true,
           riseTime=60)
                     annotation (Placement(transformation(extent={{88,64},{112,40}})));
-        Fluid.Valves.Thermostatic3WayValve    idealCtrlMixer(m_flow_nominal=sum(
+        IDEAS.Fluid.Valves.Thermostatic3WayValve    idealCtrlMixer(m_flow_nominal=sum(
               m_flow_nominal), redeclare package Medium = Medium)
           annotation (Placement(transformation(extent={{34,46},{56,70}})));
         IDEAS.Fluid.FixedResistances.Pipe_Insulated pipeReturn(
@@ -268,7 +268,7 @@ package DistrictHeating
               rotation=90,
               origin={-106,-114})));
         // --- controllers
-        replaceable Controls.ControlHeating.Ctrl_Heating ctrl_Heating(
+        replaceable IDEAS.Controls.ControlHeating.Ctrl_Heating ctrl_Heating(
           heatingCurve(timeFilter=timeFilter),
           TSupNom=TSupNom,
           dTSupRetNom=dTSupRetNom,
@@ -313,34 +313,37 @@ package DistrictHeating
               rotation=90,
               origin={-2,-104})));
         // --- Sensors
-        Fluid.Sensors.TemperatureTwoPort senTemEm_in(redeclare package Medium
-            = Medium, m_flow_nominal=sum(m_flow_nominal))
+        IDEAS.Fluid.Sensors.TemperatureTwoPort senTemEm_in(redeclare package
+            Medium =
+              Medium, m_flow_nominal=sum(m_flow_nominal))
           "Inlet temperature of the emission system"
           annotation (Placement(transformation(extent={{62,42},{82,62}})));
-        Fluid.Sensors.TemperatureTwoPort senTemHea_out(redeclare package Medium
-            = Medium, m_flow_nominal=sum(m_flow_nominal))
+        IDEAS.Fluid.Sensors.TemperatureTwoPort senTemHea_out(redeclare package
+            Medium =
+              Medium, m_flow_nominal=sum(m_flow_nominal))
           "Outlet temperature of the heater"
           annotation (Placement(transformation(extent={{-62,48},{-42,68}})));
-        Fluid.Sensors.TemperatureTwoPort senTemEm_out(redeclare package Medium
-            = Medium, m_flow_nominal=sum(m_flow_nominal))
+        IDEAS.Fluid.Sensors.TemperatureTwoPort senTemEm_out(redeclare package
+            Medium =
+              Medium, m_flow_nominal=sum(m_flow_nominal))
           "Outlet temperature of the emission system" annotation (Placement(
               transformation(
               extent={{8,-8},{-8,8}},
               rotation=0,
               origin={90,-92})));
-        Fluid.FixedResistances.SplitterFixedResistanceDpM spl(
+        IDEAS.Fluid.FixedResistances.SplitterFixedResistanceDpM spl(
           redeclare package Medium = Medium,
           m_flow_nominal={sum(m_flow_nominal),sum(m_flow_nominal),-sum(m_flow_nominal)},
           dp_nominal={0,0,0})
           annotation (Placement(transformation(extent={{76,-88},{68,-96}})));
 
-        Fluid.MixingVolumes.MixingVolume vol(
+        IDEAS.Fluid.MixingVolumes.MixingVolume vol(
           redeclare package Medium = Medium,
           m_flow_nominal=sum(m_flow_nominal),
           V=sum(m_flow_nominal)*30/1000,
           nPorts=1+nZones)
           annotation (Placement(transformation(extent={{104,-92},{124,-72}})));
-        replaceable Fluid.HeatExchangers.ConstantEffectiveness hex(redeclare
+        replaceable IDEAS.Fluid.HeatExchangers.ConstantEffectiveness hex(redeclare
             package Medium1 =
               Medium, redeclare package Medium2 = Medium)
           annotation (Placement(transformation(extent={{-146,16},{-126,36}})));
