@@ -1,11 +1,11 @@
-within DistrictHeating.Toplevel;
+within DistrictHeating4G.Toplevel;
 model district3
 
   inner IDEAS.SimInfoManager sim(occBeh=false, DHW=false)
     annotation (Placement(transformation(extent={{-98,70},{-78,90}})));
   inner Modelica.Fluid.System system
     annotation (Placement(transformation(extent={{-60,70},{-40,90}})));
-  DistrictHeating.Interfaces.Building building(
+  DistrictHeating4G.Interfaces.Baseclasses.Building building(
     redeclare IDEAS.HeatingSystems.Examples.DummyBuilding building(nZones=1,
         nEmb=0),
     redeclare IDEAS.VentilationSystems.None ventilationSystem,
@@ -19,7 +19,7 @@ model district3
             Modelica.Media.Water.ConstantPropertyLiquidWater)))
     annotation (Placement(transformation(extent={{-74,36},{-54,56}})));
 
-  DistrictHeating.Interfaces.Building building1(
+  DistrictHeating4G.Interfaces.Baseclasses.Building building1(
     redeclare IDEAS.HeatingSystems.Examples.DummyBuilding building(nZones=1,
         nEmb=0),
     redeclare IDEAS.VentilationSystems.None ventilationSystem,
