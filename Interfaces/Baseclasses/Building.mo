@@ -8,7 +8,7 @@ model Building
   replaceable IDEAS.Interfaces.BaseClasses.Structure building
     "Building structure" annotation (Placement(transformation(extent={{-66,-10},
             {-36,10}})), choicesAllMatching=true);
-  replaceable DistrictHeating.Interfaces.HeatingSystem heatingSystem(
+  replaceable DistrictHeating4G.BaseClasses.Interfaces.HeatingSystem heatingSystem(
     nZones=building.nZones) "Thermal building heating system" annotation (Placement(
         transformation(extent={{-20,-10},{20,10}})), choicesAllMatching=true);
   replaceable IDEAS.Interfaces.BaseClasses.Occupant occupant(nZones=building.nZones)
