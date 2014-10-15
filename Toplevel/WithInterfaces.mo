@@ -4,7 +4,12 @@ model WithInterfaces
     redeclare Buildings.DummyBuilding building1,
     redeclare Buildings.DummyBuilding building,
     redeclare Substations.HXWithBypass substation,
-    redeclare Substations.HXWithBypass substation1,
+    redeclare Substations.HXWithBypass substation1(
+      redeclare IDEAS.Fluid.FixedResistances.Pipe_Insulated pipe_Insulated1,
+      redeclare IDEAS.Fluid.FixedResistances.Pipe_Insulated pipe_Insulated,
+      redeclare IDEAS.Fluid.Movers.Pump pump,
+      redeclare IDEAS.Fluid.HeatExchangers.ConstantEffectiveness
+        staticFourPortHeatMassExchanger),
     redeclare Production.BoilerWithPump production(boiler(QNom(displayUnit="kW")=
              10000, m_flow_nominal=0.2)),
     TAmb(k=273 - 10));

@@ -48,8 +48,8 @@ model Building
   Modelica.Fluid.Interfaces.FluidPort_b port_supply(redeclare package Medium =
         Modelica.Media.Water.ConstantPropertyLiquidWater) if
                                                   DH annotation (Placement(
-        transformation(extent={{6,-110},{26,-90}}), iconTransformation(extent={
-            {8,-104},{18,-94}})));
+        transformation(extent={{6,-110},{26,-90}}), iconTransformation(extent=
+           {{8,-104},{18,-94}})));
 equation
 //   connect(heatingSystem.TSet, occupant.TSet) annotation (Line(
 //       points={{0,-10.4},{0,-22}},
@@ -129,7 +129,7 @@ equation
       color={0,0,0},
       smooth=Smooth.None));
   connect(occupant.TSet, heatingSystem.TSet) annotation (Line(
-      points={{0,-22},{0,-10.4}},
+      points={{0,-22},{0,-16},{0,-10.4},{-0.2,-10.4}},
       color={0,0,127},
       smooth=Smooth.None));
 
