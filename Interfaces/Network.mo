@@ -1,60 +1,89 @@
 within DistrictHeating4G.Interfaces;
-partial model Network "Interface for a district heating network"
-  Baseclasses.Building building(DH=true)
+model Network "Interface for a district heating network"
+
+  replaceable Baseclasses.Building building(DH=true)
     annotation (Placement(transformation(extent={{-40,14},{-20,34}})));
+  replaceable Baseclasses.Building building1(DH=true)
+    annotation (Placement(transformation(extent={{-76,14},{-56,34}})));
   replaceable Baseclasses.Substation substation
-    annotation (Placement(transformation(extent={{-40,-20},{-20,0}})));
+    annotation (Placement(transformation(extent={{-76,-22},{-56,-2}})));
+  replaceable Baseclasses.Substation substation1
+    annotation (Placement(transformation(extent={{-40,-22},{-20,-2}})));
   replaceable Baseclasses.Production production annotation (Placement(
         transformation(
         extent={{-10,-10},{10,10}},
+        rotation=90,
+        origin={44,-10})));
+  Modelica.Blocks.Sources.Constant TAmb
+    "Ambient Temperature for pipe losses to the ground"
+    annotation (Placement(transformation(extent={{-88,-72},{-68,-52}})));
+  IDEAS.Fluid.Sources.FixedBoundary bou(nPorts=1, redeclare package Medium =
+        Modelica.Media.Water.ConstantPropertyLiquidWater) annotation (Placement(
+        transformation(
+        extent={{-10,-10},{10,10}},
         rotation=270,
-        origin={40,-8})));
-  replaceable Baseclasses.Substation substation1
-    annotation (Placement(transformation(extent={{-76,-20},{-56,0}})));
-  Baseclasses.Building building1(DH=true)
-    annotation (Placement(transformation(extent={{-76,14},{-56,34}})));
+        origin={20,40})));
+
+    inner IDEAS.SimInfoManager sim
+    annotation (Placement(transformation(extent={{-92,76},{-72,96}})));
 equation
-  connect(building.port_a, substation.flowPort_b1) annotation (Line(
-      points={{-31.6,14},{-32,14},{-32,0}},
-      color={0,127,255},
-      smooth=Smooth.None));
-  connect(building.port_b, substation.flowPort_a1) annotation (Line(
-      points={{-28.7,14.1},{-28.7,14},{-28,14},{-28,0}},
-      color={0,127,255},
-      smooth=Smooth.None));
-  connect(substation.flowPort_b2, production.flowPort_a) annotation (Line(
-      points={{-20,-8},{4,-8},{4,8},{40,8},{40,2}},
-      color={0,0,0},
-      smooth=Smooth.None));
-  connect(substation.flowPort_a2, production.flowPort_b) annotation (Line(
-      points={{-20,-12},{4,-12},{4,-24},{40,-24},{40,-18}},
-      color={0,0,0},
-      smooth=Smooth.None));
-  connect(substation.flowPort_b, substation1.flowPort_a2) annotation (Line(
-      points={{-40,-12},{-56,-12}},
-      color={0,0,0},
-      smooth=Smooth.None));
-  connect(substation1.flowPort_b1, building1.port_a) annotation (Line(
-      points={{-68,0},{-68,14},{-67.6,14}},
-      color={0,0,0},
-      smooth=Smooth.None));
-  connect(substation1.flowPort_a1, building1.port_b) annotation (Line(
-      points={{-64,0},{-64,8},{-64,14.1},{-64.7,14.1}},
-      color={0,0,0},
-      smooth=Smooth.None));
-  connect(substation1.flowPort_a, substation1.flowPort_b) annotation (Line(
-      points={{-76,-8},{-86,-8},{-86,-12},{-76,-12}},
-      color={0,0,0},
-      smooth=Smooth.None));
-  connect(substation1.flowPort_supply_b, substation.flowPort_supply_a)
+  connect(substation.flowPort_supply_in, substation1.flowPort_supply_out)
     annotation (Line(
-      points={{-56,-8},{-40,-8}},
+      points={{-56,-10},{-40,-10}},
       color={0,0,0},
+      smooth=Smooth.None));
+  connect(substation.flowPort_return_out, substation1.flowPort_return_in)
+    annotation (Line(
+      points={{-56,-14},{-40,-14}},
+      color={0,0,0},
+      smooth=Smooth.None));
+  connect(substation.flowPort_supply_out, substation.flowPort_return_in)
+    annotation (Line(
+      points={{-76,-10},{-84,-10},{-84,-14},{-76,-14}},
+      color={0,0,0},
+      smooth=Smooth.None));
+  connect(production.flowPort_supply, substation1.flowPort_supply_in)
+    annotation (Line(
+      points={{44,0},{44,16},{0,16},{0,-10},{-20,-10},{-20,-10}},
+      color={0,0,0},
+      smooth=Smooth.None));
+  connect(substation1.flowPort_return_out, production.flowPort_return)
+    annotation (Line(
+      points={{-20,-14},{-20,-14},{0,-14},{0,-36},{44,-36},{44,-20}},
+      color={0,0,0},
+      smooth=Smooth.None));
+  connect(substation.u, substation1.u) annotation (Line(
+      points={{-66,-22.6},{-66,-40},{-30,-40},{-30,-40},{-30,-22},{-30,-22},{
+          -30,-22.6}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(TAmb.y, substation1.u) annotation (Line(
+      points={{-67,-62},{-48,-62},{-48,-40},{-30,-40},{-30,-22.6}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(building1.port_return, substation.flowPort_b1) annotation (Line(
+      points={{-67.6,14},{-68,14},{-68,-2}},
+      color={0,127,255},
+      smooth=Smooth.None));
+  connect(building1.port_supply, substation.flowPort_a1) annotation (Line(
+      points={{-64.7,14.1},{-64.7,14},{-64,14},{-64,-2}},
+      color={0,127,255},
+      smooth=Smooth.None));
+  connect(building.port_return, substation1.flowPort_b1) annotation (Line(
+      points={{-31.6,14},{-32,14},{-32,-2}},
+      color={0,127,255},
+      smooth=Smooth.None));
+  connect(building.port_supply, substation1.flowPort_a1) annotation (Line(
+      points={{-28.7,14.1},{-28.7,14},{-28,14},{-28,-2}},
+      color={0,127,255},
+      smooth=Smooth.None));
+  connect(bou.ports[1], substation1.flowPort_supply_in) annotation (Line(
+      points={{20,30},{20,16},{0,16},{0,-10},{-20,-10}},
+      color={0,127,255},
       smooth=Smooth.None));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}}), graphics), Icon(coordinateSystem(
-          preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics
-        ={
+          preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
         Line(
           points={{-60,-40},{-40,-40},{-40,0},{40,0},{40,40},{80,40}},
           color={0,0,255},

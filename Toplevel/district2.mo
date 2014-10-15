@@ -1,4 +1,4 @@
-within DistrictHeating.Toplevel;
+within DistrictHeating4G.Toplevel;
 model district2
 
   inner IDEAS.SimInfoManager sim(occBeh=false, DHW=false)

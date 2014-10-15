@@ -49,9 +49,13 @@ partial model HeatingSystem "Partial heating/cooling system"
     annotation (Placement(transformation(extent={{-210,50},{-190,70}})));
 
   // --- Hydraulic
-  Modelica.Fluid.Interfaces.FluidPort_a port_a if DH
-    annotation (Placement(transformation(extent={{-110,90},{-90,110}})));
-  Modelica.Fluid.Interfaces.FluidPort_b port_b if DH
+  Modelica.Fluid.Interfaces.FluidPort_a port_supply(redeclare package Medium =
+        Modelica.Media.Water.ConstantPropertyLiquidWater) if
+                                                       DH
+    annotation (Placement(transformation(extent={{-70,90},{-50,110}})));
+  Modelica.Fluid.Interfaces.FluidPort_b port_return(redeclare package Medium =
+        Modelica.Media.Water.ConstantPropertyLiquidWater) if
+                                                       DH
     annotation (Placement(transformation(extent={{-130,90},{-110,110}})));
 
   // --- Electrical
@@ -163,8 +167,9 @@ equation
           points={{200,100},{200,-100}},
           color={85,170,255},
           smooth=Smooth.None)}),
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-200,-100},{200,
-            100}}), graphics),
+    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-200,-100},{
+            200,100}}),
+                    graphics),
     Documentation(info="<html>
 <p><b>Description</b> </p>
 <p>Interface model for a complete multi-zone heating system (with our without domestic hot water and solar system).</p>

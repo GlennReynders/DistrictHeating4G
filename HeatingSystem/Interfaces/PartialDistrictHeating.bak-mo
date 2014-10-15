@@ -1,6 +1,6 @@
 within DistrictHeating4G.HeatingSystem.Interfaces;
 partial model PartialDistrictHeating "Hydraulic multi-zone heating "
-  import DistrictHeating;
+  import DistrictHeating4G;
   replaceable package Medium =
       Modelica.Media.Water.ConstantPropertyLiquidWater;
   extends DistrictHeating4G.Interfaces.Baseclasses.HeatingSystem(
@@ -86,7 +86,7 @@ partial model PartialDistrictHeating "Hydraulic multi-zone heating "
         origin={-127,-21})));
   IDEAS.Fluid.Sources.FixedBoundary absolutePressure(redeclare package Medium
       = Medium, use_T=false,
-    nPorts=3)
+    nPorts=1)
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-106,-114})));
@@ -140,10 +140,6 @@ partial model PartialDistrictHeating "Hydraulic multi-zone heating "
       = Medium, m_flow_nominal=sum(m_flow_nominal))
     "Inlet temperature of the emission system"
     annotation (Placement(transformation(extent={{62,42},{82,62}})));
-  IDEAS.Fluid.Sensors.TemperatureTwoPort senTemHea_out(redeclare package Medium
-      = Medium, m_flow_nominal=sum(m_flow_nominal))
-    "Outlet temperature of the heater"
-    annotation (Placement(transformation(extent={{-62,48},{-42,68}})));
   IDEAS.Fluid.Sensors.TemperatureTwoPort senTemEm_out(redeclare package Medium
       = Medium, m_flow_nominal=sum(m_flow_nominal))
     "Outlet temperature of the emission system" annotation (Placement(
@@ -163,10 +159,6 @@ partial model PartialDistrictHeating "Hydraulic multi-zone heating "
     V=sum(m_flow_nominal)*30/1000,
     nPorts=1+nZones)
     annotation (Placement(transformation(extent={{108,-56},{128,-36}})));
-  replaceable IDEAS.Fluid.HeatExchangers.ConstantEffectiveness hex(
-      redeclare package Medium2 = Medium, redeclare package Medium1 =
-        Modelica.Media.Water.ConstantPropertyLiquidWater)
-    annotation (Placement(transformation(extent={{-146,16},{-126,36}})));
 equation
     // connections that are function of the number of circuits
   for i in 1:nZones loop
@@ -215,10 +207,6 @@ equation
       smooth=Smooth.None));
   connect(idealCtrlMixer.port_b, senTemEm_in.port_a) annotation (Line(
       points={{56,58},{60,58},{60,52},{62,52}},
-      color={0,127,255},
-      smooth=Smooth.None));
-  connect(senTemHea_out.port_b, pipeSupply.port_a) annotation (Line(
-      points={{-42,58},{-16,58}},
       color={0,127,255},
       smooth=Smooth.None));
   connect(TSensor, add.u1) annotation (Line(
@@ -271,23 +259,7 @@ equation
       color={191,0,0},
       smooth=Smooth.None));
   connect(absolutePressure.ports[1], pipeReturn.port_b) annotation (Line(
-      points={{-108.667,-104},{-108.667,-92},{-18,-92}},
-      color={0,127,255},
-      smooth=Smooth.None));
-  connect(port_b, hex.port_a1) annotation (Line(
-      points={{-120,100},{-134,100},{-134,32},{-146,32}},
-      color={0,127,255},
-      smooth=Smooth.None));
-  connect(hex.port_b1, port_a) annotation (Line(
-      points={{-126,32},{-114,32},{-114,100},{-100,100}},
-      color={0,127,255},
-      smooth=Smooth.None));
-  connect(hex.port_b2, absolutePressure.ports[2]) annotation (Line(
-      points={{-146,20},{-126,20},{-126,-104},{-106,-104}},
-      color={0,127,255},
-      smooth=Smooth.None));
-  connect(hex.port_a2, senTemHea_out.port_a) annotation (Line(
-      points={{-126,20},{-94,20},{-94,58},{-62,58}},
+      points={{-106,-104},{-106,-92},{-18,-92}},
       color={0,127,255},
       smooth=Smooth.None));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-200,
