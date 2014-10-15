@@ -49,9 +49,13 @@ partial model HeatingSystem "Partial heating/cooling system"
     annotation (Placement(transformation(extent={{-210,50},{-190,70}})));
 
   // --- Hydraulic
-  Modelica.Fluid.Interfaces.FluidPort_a port_a if DH
-    annotation (Placement(transformation(extent={{-110,90},{-90,110}})));
-  Modelica.Fluid.Interfaces.FluidPort_b port_b if DH
+  Modelica.Fluid.Interfaces.FluidPort_a port_supply(redeclare package Medium =
+        Modelica.Media.Water.ConstantPropertyLiquidWater) if
+                                                       DH
+    annotation (Placement(transformation(extent={{-70,90},{-50,110}})));
+  Modelica.Fluid.Interfaces.FluidPort_b port_return(redeclare package Medium =
+        Modelica.Media.Water.ConstantPropertyLiquidWater) if
+                                                       DH
     annotation (Placement(transformation(extent={{-130,90},{-110,110}})));
 
   // --- Electrical

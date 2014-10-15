@@ -1,0 +1,119 @@
+within DistrictHeating4G.Substations;
+model ConstantEffectivenessHX
+  //Extensions
+  extends DistrictHeating4G.Interfaces.Baseclasses.Substation;
+
+  //Components
+  replaceable IDEAS.Fluid.Interfaces.StaticFourPortHeatMassExchanger
+    staticFourPortHeatMassExchanger "Building substation"
+    annotation (Placement(transformation(extent={{-10,68},{10,88}})));
+  IDEAS.Fluid.FixedResistances.SplitterFixedResistanceDpM spl1(
+    m_flow_nominal={0.1,-0.1,-0.1},
+    dp_nominal={20,20,10},
+    redeclare package Medium =
+        Modelica.Media.Water.ConstantPropertyLiquidWater) "Splitter for bypass"
+    annotation (Placement(transformation(extent={{-10,-10},{-30,-30}})));
+  IDEAS.Fluid.FixedResistances.SplitterFixedResistanceDpM spl2(
+    m_flow_nominal={0.1,-0.1,-0.1},
+    dp_nominal={20,20,10},
+    redeclare package Medium =
+        Modelica.Media.Water.ConstantPropertyLiquidWater) "Splitter for bypass"
+    annotation (Placement(transformation(extent={{30,30},{10,10}})));
+  replaceable IDEAS.Fluid.FixedResistances.Pipe_Insulated pipe_Insulated
+    "Insulated pipe with heat exchange to the outside"
+    annotation (
+      Placement(transformation(
+        extent={{-10,-4},{10,4}},
+        rotation=180,
+        origin={-66,-20})));
+
+  replaceable IDEAS.Fluid.FixedResistances.Pipe_Insulated pipe_Insulated1
+    "Insulated pipe with heat exchange to the outside"
+    annotation (
+      Placement(transformation(
+        extent={{-10,-4},{10,4}},
+        rotation=180,
+        origin={-66,20})));
+  replaceable IDEAS.Fluid.Movers.Pump pump(useInput=true)
+    "Pump of the heat exchanger"
+    annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=270,
+        origin={-20,42})));
+
+  Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature
+    prescribedTemperature "Ambient Temperature"
+    annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=90,
+        origin={-66,-54})));
+
+equation
+  //Connections
+  connect(flowPort_b1, staticFourPortHeatMassExchanger.port_a1) annotation (
+      Line(
+      points={{-20,100},{-20,84},{-10,84}},
+      color={0,0,0},
+      smooth=Smooth.None));
+  connect(staticFourPortHeatMassExchanger.port_b1, flowPort_a1) annotation (
+      Line(
+      points={{10,84},{20,84},{20,100}},
+      color={0,127,255},
+      smooth=Smooth.None));
+  connect(staticFourPortHeatMassExchanger.port_a2, spl2.port_3) annotation (
+      Line(
+      points={{10,72},{20,72},{20,30}},
+      color={0,127,255},
+      smooth=Smooth.None));
+  connect(spl1.port_2, pipe_Insulated.port_a) annotation (Line(
+      points={{-30,-20},{-56,-20}},
+      color={0,127,255},
+      smooth=Smooth.None));
+  connect(spl2.port_2, pipe_Insulated1.port_a) annotation (Line(
+      points={{10,20},{-56,20}},
+      color={0,127,255},
+      smooth=Smooth.None));
+  connect(staticFourPortHeatMassExchanger.port_b2, pump.port_a) annotation (
+      Line(
+      points={{-10,72},{-20,72},{-20,52}},
+      color={0,127,255},
+      smooth=Smooth.None));
+  connect(pump.port_b, spl1.port_3) annotation (Line(
+      points={{-20,32},{-20,-10}},
+      color={0,127,255},
+      smooth=Smooth.None));
+  connect(pipe_Insulated.heatPort, prescribedTemperature.port) annotation (Line(
+      points={{-66,-16},{-66,-44}},
+      color={191,0,0},
+      smooth=Smooth.None));
+  connect(pipe_Insulated1.heatPort, prescribedTemperature.port) annotation (
+      Line(
+      points={{-66,24},{-66,-44}},
+      color={191,0,0},
+      smooth=Smooth.None));
+  connect(prescribedTemperature.T, u) annotation (Line(
+      points={{-66,-66},{-66,-80},{0,-80},{0,-106}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(flowPort_supply_in, flowPort_supply_in) annotation (Line(
+      points={{100,20},{100,20}},
+      color={0,0,0},
+      smooth=Smooth.None));
+  connect(spl2.port_1, flowPort_supply_in) annotation (Line(
+      points={{30,20},{100,20}},
+      color={0,127,255},
+      smooth=Smooth.None));
+  connect(pipe_Insulated1.port_b, flowPort_supply_out) annotation (Line(
+      points={{-76,20},{-100,20}},
+      color={0,127,255},
+      smooth=Smooth.None));
+  connect(spl1.port_1, flowPort_return_out) annotation (Line(
+      points={{-10,-20},{100,-20}},
+      color={0,127,255},
+      smooth=Smooth.None));
+  connect(pipe_Insulated.port_b, flowPort_return_in) annotation (Line(
+      points={{-76,-20},{-100,-20}},
+      color={0,127,255},
+      smooth=Smooth.None));
+
+end ConstantEffectivenessHX;

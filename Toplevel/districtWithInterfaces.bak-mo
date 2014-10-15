@@ -1,0 +1,11 @@
+within DistrictHeating4G.Toplevel;
+model districtWithInterfaces
+  Interfaces.Network network(
+    redeclare Production.Boiler production,
+    redeclare Substations.HXWithBypass substation,
+    redeclare Substations.HXWithBypass substation1,
+    redeclare Buildings.DummyBuilding building1,
+    redeclare Buildings.DummyBuilding building,
+    const(k=273 - 10))
+    annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
+end districtWithInterfaces;

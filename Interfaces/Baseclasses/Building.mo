@@ -8,8 +8,9 @@ model Building
   replaceable IDEAS.Interfaces.BaseClasses.Structure building
     "Building structure" annotation (Placement(transformation(extent={{-66,-10},
             {-36,10}})), choicesAllMatching=true);
-  replaceable DistrictHeating4G.BaseClasses.Interfaces.HeatingSystem heatingSystem(
-    nZones=building.nZones) "Thermal building heating system" annotation (Placement(
+  replaceable DistrictHeating4G.Interfaces.Baseclasses.HeatingSystem heatingSystem(
+    nZones=building.nZones, DH=true) "Thermal building heating system"
+                                                              annotation (Placement(
         transformation(extent={{-20,-10},{20,10}})), choicesAllMatching=true);
   replaceable IDEAS.Interfaces.BaseClasses.Occupant occupant(nZones=building.nZones)
     constrainedby IDEAS.Interfaces.BaseClasses.Occupant(nZones=building.nZones)
@@ -40,15 +41,15 @@ model Building
     standAlone
     annotation (Placement(transformation(extent={{60,-80},{80,-60}})));
 
-  Modelica.Fluid.Interfaces.FluidPort_a port_a(redeclare package Medium =
+  Modelica.Fluid.Interfaces.FluidPort_a port_return(redeclare package Medium =
         Modelica.Media.Water.ConstantPropertyLiquidWater) if
                                                   DH
     annotation (Placement(transformation(extent={{-26,-110},{-6,-90}})));
-  Modelica.Fluid.Interfaces.FluidPort_b port_b(redeclare package Medium =
+  Modelica.Fluid.Interfaces.FluidPort_b port_supply(redeclare package Medium =
         Modelica.Media.Water.ConstantPropertyLiquidWater) if
                                                   DH annotation (Placement(
-        transformation(extent={{6,-110},{26,-90}}), iconTransformation(extent={{
-            8,-104},{18,-94}})));
+        transformation(extent={{6,-110},{26,-90}}), iconTransformation(extent=
+           {{8,-104},{18,-94}})));
 equation
 //   connect(heatingSystem.TSet, occupant.TSet) annotation (Line(
 //       points={{0,-10.4},{0,-22}},
@@ -117,14 +118,6 @@ equation
       points={{-36,6},{-20,6}},
       color={191,0,0},
       smooth=Smooth.None));
-  connect(building.heatPortCon, heatingSystem.heatPortCon) annotation (Line(
-      points={{-36,2},{-20,2}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(building.heatPortRad, heatingSystem.heatPortRad) annotation (Line(
-      points={{-36,-2},{-20,-2}},
-      color={191,0,0},
-      smooth=Smooth.None));
   connect(building.flowPort_Out, ventilationSystem.flowPort_In) annotation (
       Line(
       points={{-53,10},{-52,10},{-52,32},{-20,32}},
@@ -136,19 +129,12 @@ equation
       color={0,0,0},
       smooth=Smooth.None));
   connect(occupant.TSet, heatingSystem.TSet) annotation (Line(
-      points={{0,-22},{0,-16},{0,-10.4},{0,-10.4}},
+      points={{0,-22},{0,-16},{0,-10.4},{-0.2,-10.4}},
       color={0,0,127},
       smooth=Smooth.None));
 
   if heatingSystem.DH then
-     connect(heatingSystem.port_b, port_a) annotation (Line(
-      points={{-12,10},{-16,10},{-16,-100}},
-      color={0,127,255},
-      smooth=Smooth.None));
-  connect(heatingSystem.port_a, port_b) annotation (Line(
-      points={{-10,10},{16,10},{16,-100}},
-      color={0,127,255},
-      smooth=Smooth.None));
+
   end if
   annotation (Icon(graphics={
         Line(
@@ -204,6 +190,22 @@ equation
           textString="%name")}), Diagram(coordinateSystem(preserveAspectRatio=false,
                    extent={{-100,-100},{100,100}}), graphics));
 
+  connect(heatingSystem.heatPortRad, building.heatPortRad) annotation (Line(
+      points={{-20,-2},{-36,-2}},
+      color={191,0,0},
+      smooth=Smooth.None));
+  connect(heatingSystem.heatPortCon, building.heatPortCon) annotation (Line(
+      points={{-20,2},{-36,2}},
+      color={191,0,0},
+      smooth=Smooth.None));
+  connect(heatingSystem.port_supply, port_supply) annotation (Line(
+      points={{-6,10},{-6,16},{16,16},{16,-100}},
+      color={0,127,255},
+      smooth=Smooth.None));
+  connect(heatingSystem.port_return, port_return) annotation (Line(
+      points={{-12,10},{-12,16},{-16,16},{-16,-100}},
+      color={0,127,255},
+      smooth=Smooth.None));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}}), graphics));
 end Building;

@@ -34,11 +34,11 @@ equation
   P[1] = 0;
   Q[1] = 0;
   connect(port_b, pipe_HeatPort.port_a) annotation (Line(
-      points={{-120,100},{-98,100},{-98,18},{-76,18}},
+      points={{-120,100},{-120,18},{-76,18}},
       color={0,127,255},
       smooth=Smooth.None));
   connect(pipe_HeatPort.port_b, port_a) annotation (Line(
-      points={{-56,18},{-78,18},{-78,100},{-100,100}},
+      points={{-56,18},{-100,18},{-100,100}},
       color={0,127,255},
       smooth=Smooth.None));
   connect(prescribedHeatFlow.port, pipe_HeatPort.heatPort) annotation (Line(
