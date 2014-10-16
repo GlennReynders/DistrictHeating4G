@@ -8,7 +8,7 @@ partial model PartialHydraulicHeating "Hydraulic multi-zone heating "
     nConvPorts = nZones,
     nRadPorts = nZones,
     nTemSen = nZones,
-    nEmbPorts=0,
+    nEmbPorts=nZones,
     nLoads=1,
     nZones=1);
   // --- Paramter: General parameters for the design (nominal) conditions and heat curve

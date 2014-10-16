@@ -2,9 +2,8 @@ within DistrictHeating4G.Buildings;
 model DummyBuilding
 
   extends Interfaces.Baseclasses.Building(
-    redeclare IDEAS.HeatingSystems.Examples.DummyBuilding building(nZones=1,
-        nEmb=0),
-    redeclare IDEAS.VentilationSystems.None ventilationSystem,
+    redeclare D1_annex60CE                                building,
+    redeclare IDEAS.VentilationSystems.Ideal ventilationSystem,
     redeclare IDEAS.Occupants.Standards.ISO13790 occupant,
     DH=true,
     redeclare HeatingSystem.Radiator                        heatingSystem(
